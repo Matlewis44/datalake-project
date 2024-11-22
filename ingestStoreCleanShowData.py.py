@@ -220,44 +220,6 @@ def merge_delta(incremental, target):
 
 # COMMAND ----------
 
-# # Silver Layer: Aggregate Transactions
-# silver_transactions_delta_table = (spark.readStream.format("delta").table("datalake_project.bronze.transactions_delta_table_raw").
-#         groupBy("customerID", "lastTransactionDate", F.window("timestamp","30 minutes"))
-#         .agg(F.sum("amount").alias("total_amount"), F.count("transactionID").alias("transaction_count"))
-#         .writeStream
-#         .foreachBatch(lambda i,b: merge_delta(i,SILVER_PATH+"silver_transactions_delta_table"))
-#         .outputMode("update")
-#         .option('checkpointLocation',CHECKPOINT_PATH+'silver_transactions_delta_table')
-#         # .trigger(once=True)
-#         .start()
-# )
-
-# # Silver Layer: Aggregate Logs
-# silver_logs_delta_table = (spark.readStream.format("delta").table("datalake_project.bronze.log_delta_table_raw").
-#         groupBy("customerID", "logDate", F.window("timestamp","30 minutes"))
-#         .agg(F.count("logID").alias("log_count"))
-#         .writeStream
-#         .foreachBatch(lambda i,b: merge_delta(i,SILVER_PATH+"silver_logs_delta_table"))
-#         .outputMode("update")
-#         .option('checkpointLocation',CHECKPOINT_PATH+'silver_logs_delta_table')
-#         # .trigger(once=True)
-#         .start()
-# )
-
-# # Silver Layer: Aggregate Social Media Posts
-# silver_social_media_table = (spark.readStream.format("delta").table("datalake_project.bronze.social_media_table_raw").
-#         groupBy("customerID", F.window("timestamp","30 minutes"))
-#         .agg(F.count("postID").alias("post_count"))
-#         .writeStream
-#         .foreachBatch(lambda i,b: merge_delta(i,SILVER_PATH+"silver_social_media_table"))
-#         .outputMode("update")
-#         .option('checkpointLocation',CHECKPOINT_PATH+'silver_social_media_table')
-#         # .trigger(once=True)
-#         .start()
-# )
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC - Aggrégation des transactions, journaux et publications sur les réseaux sociaux à partir de tables Delta brutes (bronze)
 # MAGIC - Regroupement par client et par fenêtre de temps de 30 minutes. 
